@@ -1,0 +1,32 @@
+trigger: 
+- none
+
+parameters:
+- name: image
+  displayName: Pool Image
+  type: string
+  default: ubuntu-latest
+  values:
+    - windows-latest
+    - ubuntu-latest
+    - macOS-latest
+# Parameters for region to deployment
+- name: deploy_region
+  displayName: Which region to use?
+  type: string
+  values:
+    - prod_var_grp
+    - test_var_grp
+  default: 'test_var_grp'
+
+jobs:
+- job: build
+  displayName: Build
+  pool:
+    vmImage: ${{parameters.image}}
+  variables:
+  - group: ${{parameters.deploy_region}}
+  steps:
+    - script: echo building $(Build.BuildNumber) with ${{ parameters.image }}
+    - script: echo deploy_region = ${{parameters.deploy_region}}
+    - script: echo $(region)
